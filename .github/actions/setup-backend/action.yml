@@ -28,62 +28,36 @@ runs:
       id: setup-python
       with:
         python-version: ${{ inputs.python-version }}
-    
+
 
     # set some helpful temporary variables
     - uses: ./.github/actions/set-env-var
       with:
         name: my_python
         value: python${{ inputs.python-version }}
-    
+
     - uses: ./.github/actions/set-env-var
       with:
         name: my_cache_prefix
         value: ${{ runner.os }}-${{ env.my_python }}
-    
+
     - uses: ./.github/actions/set-env-var
       with:
-        name: my_pipenv_hash_path
-        value: ~/.local/${{ env.my_python }}/site-packages/pipenv/__version__.py
+        name: my_python_packages_path
+        command: python -c 'import site; print(site.getsitepackages()[0])'
 
-    - run: pip install pipenv=="${{ inputs.pipenv-version }}"
-      shell: bash
-    
-
-    - run: python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
-      shell: bash
-
-    - run: python3 -c 'import site; print(site.getsitepackages())'
-      shell: bash
-
-    - run: python3 -c 'import pipenv; print(pipenv.__file__)'
-      shell: bash
-
-    - run: python3 -c 'import pipenv; print(pipenv.__path__)'
-      shell: bash
-    
-    - run: python3 -m site --user-site
-      shell: bash
-
-    - run: python3 -m site --user-base
-      shell: bash
-
-    - run: python3 -m site
-      shell: bash
-
-#/opt/hostedtoolcache/Python/3.8.12/x64/lib/python3.8/site-packages/pipenv/__version__.py
-
-
-    - run: ls ~/.local/${{ env.my_python }}
-      shell: bash
+    - uses: ./.github/actions/set-env-var
+      with:
+        name: my_pip_hash_path
+        value: ${{ env.my_python_packages_path }}/pipenv
 
 
     # set up cache for pipenv installation and conditionally install it
     - uses: actions/cache@v2
       id: cache-pip
       with:
-        path: ~/.local/${{ env.my_python }}/site-packages/pipenv
-        key: ${{ env.my_cache_prefix }}-pip-${{ hashFiles(format('{0}', env.my_pipenv_hash_path)) }}
+        path: ${{ env.my_pip_hash_path }}
+        key: ${{ env.my_cache_prefix }}-pip-${{ inputs.pipenv-version }}
         restore-keys: ${{ env.my_cache_prefix }}-pip-
 
     - run: pip install pipenv=="${{ inputs.pipenv-version }}"
@@ -95,10 +69,12 @@ runs:
     - uses: actions/cache@v2
       id: cache-pipenv
       with:
-        path: ~/.local/share/virtualenvs
-        key: ${{ env.my_cache_prefix }}-pipenv-${{ hashFiles(format('{0}', inputs.python-lockfile)) }}
+        path: ./backend/.venv
+        key: ${{ env.my_cache_prefix }}-pipenv-${{ hashFiles(format('{0}', inputs.pipenv-lockfile)) }}
         restore-keys: ${{ env.my_cache_prefix }}-pipenv-
 
     - run: pipenv install --dev --deploy
       if: steps.cache-pipenv.outputs.cache-hit == 'false'
       shell: bash
+      env:
+        PIPENV_VENV_IN_PROJECT: 1

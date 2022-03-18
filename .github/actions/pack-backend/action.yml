@@ -5,11 +5,16 @@ description: Packs up backend for deployment and uploads to artifact.
 runs:
   using: composite
   steps:
-    - run: 7z a ../lambda.zip $(pipenv --venv)/lib/python*/site-packages/*
+    - uses: ./.github/actions/set-env-var
+      with:
+        name: my_installed_packages
+        command: pipenv run python -c 'import site; print(site.getsitepackages()[0])'
+
+    - run: 7z a ../lambda.zip ${{ env.my_installed_packages }}
       working-directory: ./backend
       shell: bash
 
-    - run: 7z a ../lambda.zip migrations ../backend
+    - run: 7z a ../lambda.zip -xr'!.venv' migrations ../backend
       working-directory: ./backend
       shell: bash
 
