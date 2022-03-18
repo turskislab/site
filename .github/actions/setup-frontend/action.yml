@@ -25,21 +25,21 @@ runs:
 
 
     # set some helpful temporary variables
-    - uses: ./.github/actions/set-var
+    - uses: ./.github/actions/set-env-var
       with:
-        name: "my_node"
+        name: my_node
         value: node${{ inputs.node-version }}
 
-    - uses: ./.github/actions/set-var
+    - uses: ./.github/actions/set-env-var
       with:
-        name: "my_cache_prefix"
+        name: my_cache_prefix
         value: ${{ runner.os }}-${{ env.my_node }}
-
-    - uses: ./.github/actions/set-var
+    
+    - uses: ./.github/actions/set-env-var
       with:
-        name: "my_yarn_hash_path"
-        value: python${{ inputs.python-version }}
-      
+        name: my_yarn_hash_path
+        command: yarn cache dir
+
 
     # set up cache for yarn installation and conditionally install it
     - uses: actions/cache@v2

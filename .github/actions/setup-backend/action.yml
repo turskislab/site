@@ -31,17 +31,17 @@ runs:
     
 
     # set some helpful temporary variables
-    - uses: ./.github/actions/set-var
+    - uses: ./.github/actions/set-env-var
       with:
         name: "my_python"
         value: python${{ inputs.python-version }}
     
-    - uses: ./.github/actions/set-var
+    - uses: ./.github/actions/set-env-var
       with:
         name: "my_cache_prefix"
         value: ${{ runner.os }}-${{ env.my_python }}
     
-    - uses: ./.github/actions/set-var
+    - uses: ./.github/actions/set-env-var
       with:
         name: "my_pipenv_hash_path"
         value: ${{ format('~/.local/{0}/site-packages/pipenv/__version__.py', env.my_python) }}

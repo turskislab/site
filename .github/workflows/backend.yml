@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/setup-backend
+      - uses: .github/actions/setup-backend
 
       - run: pipenv run black --check .
       - run: pipenv run pytest
@@ -42,5 +42,5 @@ jobs:
           MAIL_PASSWORD: ''
           MAIL_SUPPRESS_SEND: 'TRUE'
 
-      - uses: ./.github/actions/pack-backend
+      - uses: .github/actions/pack-backend
         if: github.event_name == 'push'
