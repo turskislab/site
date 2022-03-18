@@ -29,7 +29,7 @@ runs:
         NAME: ${{ inputs.name }}
         VALUE: ${{ inputs.value }}
 
-    - run: ${{ inputs.command }}
+    - run: echo "::set-output name=stdout::$(${{ inputs.command }})"
       if: inputs.command != ''
       id: command
       shell: bash
@@ -39,4 +39,4 @@ runs:
       shell: bash
       env:
         NAME: ${{ inputs.name }}
-        VALUE: ${{ steps.command.output.stdout }}
+        VALUE: ${{ steps.command.outputs.stdout }}
