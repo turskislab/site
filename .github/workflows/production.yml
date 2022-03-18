@@ -4,9 +4,6 @@ on:
   release:
     types:
       - created
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
   workflow_dispatch:
 
 jobs:
