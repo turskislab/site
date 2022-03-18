@@ -1,6 +1,7 @@
 lambda.zip
 public
-*.json
+response.json
+request.json
 
 node_modules
 .venv

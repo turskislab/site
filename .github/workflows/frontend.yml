@@ -1,9 +1,11 @@
-name: lint and test frontend
+name: frontend
 
 on:
   push:
     paths:
       - 'frontend/**'
+    branches:
+      - 'master'
   pull_request:
     paths:
       - 'frontend/**'
@@ -25,6 +27,9 @@ jobs:
           cache-dependency-path: 'frontend/yarn.lock'
 
       - run: yarn install --frozen-lockfile
+      - run: ls -la
+      - run: ls ../
+   
       - run: yarn run lint
       - run: yarn run test
 
