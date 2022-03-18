@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +14,7 @@ jobs:
     environment:
       name: staging
       url: https://dev.codeforpoznan.pl
-    if: github.repository == 'turskislab/site'
+      #if: github.repository == 'turskislab/site'
 
     steps:
       - uses: actions/download-artifact@v3
