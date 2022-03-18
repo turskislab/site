@@ -37,18 +37,18 @@ runs:
 
     - uses: ./.github/actions/set-env-var
       with:
-        name: my_yarn_hash_path
+        name: my_cache_lockfile_path
         command: yarn cache dir
 
 
-    # set up cache for yarn installation and conditionally install it
+    # set up cache for lockfile and conditionally install deps
     - uses: actions/cache@v2
-      id: cache-yarn
+      id: cache-lockfile
       with:
-        path: ${{ env.my_yarn_hash_path }}
-        key: ${{ env.my_cache_prefix }}-yarn-${{ hashFiles(format('{0}', inputs.yarn-lockfile)) }}
-        restore-keys: ${{ env.my_cache_prefix }}-yarn-
+        path: ${{ env.my_cache_lockfile_path }}
+        key: ${{ env.my_cache_prefix }}-lockfile-${{ hashFiles(format('{0}', inputs.yarn-lockfile)) }}
+        restore-keys: ${{ env.my_cache_prefix }}-lockfile-
 
     - run: yarn install --frozen-lockfile
-      if: steps.cache-yarn.outputs.cache-hit == 'false'
+      if: steps.cache-lockfile.outputs.cache-hit != 'true'
       shell: bash

@@ -48,33 +48,33 @@ runs:
 
     - uses: ./.github/actions/set-env-var
       with:
-        name: my_pip_hash_path
+        name: my_pipenv_cache_path
         value: ${{ env.my_python_packages_path }}/pipenv
 
 
     # set up cache for pipenv installation and conditionally install it
     - uses: actions/cache@v2
-      id: cache-pip
+      id: cache-pipenv
       with:
-        path: ${{ env.my_pip_hash_path }}
-        key: ${{ env.my_cache_prefix }}-pip-${{ inputs.pipenv-version }}
-        restore-keys: ${{ env.my_cache_prefix }}-pip-
+        path: ${{ env.my_pipenv_cache_path }}
+        key: ${{ env.my_cache_prefix }}-pipenv-${{ inputs.pipenv-version }}
+        restore-keys: ${{ env.my_cache_prefix }}-pipenv-
 
     - run: pip install pipenv=="${{ inputs.pipenv-version }}"
-      if: steps.cache-pip.outputs.cache-hit == 'false'
+      if: steps.cache-pipenv.outputs.cache-hit != 'true'
       shell: bash
 
 
-    # set up cache for dependencies and conditionally install them
+    # set up cache for lockfile and conditionally install dependencies
     - uses: actions/cache@v2
-      id: cache-pipenv
+      id: cache-lockfile
       with:
         path: ./backend/.venv
-        key: ${{ env.my_cache_prefix }}-pipenv-${{ hashFiles(format('{0}', inputs.pipenv-lockfile)) }}
-        restore-keys: ${{ env.my_cache_prefix }}-pipenv-
+        key: ${{ env.my_cache_prefix }}-lockfile-${{ hashFiles(format('{0}', inputs.pipenv-lockfile)) }}
+        restore-keys: ${{ env.my_cache_prefix }}-lockfile-
 
     - run: pipenv install --dev --deploy
-      if: steps.cache-pipenv.outputs.cache-hit == 'false'
+      if: steps.cache-lockfile.outputs.cache-hit != 'true'
       shell: bash
       env:
         PIPENV_VENV_IN_PROJECT: 1
