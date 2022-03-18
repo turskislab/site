@@ -46,6 +46,8 @@ runs:
         name: my_pipenv_hash_path
         value: ~/.local/${{ env.my_python }}/site-packages/pipenv/__version__.py
 
+    - run: pip install pipenv=="${{ inputs.pipenv-version }}"
+      shell: bash
 
     - run: which pipenv
       shell: bash
