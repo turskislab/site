@@ -1,0 +1,26 @@
+name: deploy to staging
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+  staging:
+    name: deploy
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://dev.codeforpoznan.pl
+    if: github.repository == 'CodeForPoznan/codeforpoznan.pl_v3'
+
+    steps:
+      - uses: actions/download-artifact@v3
+
+      - name: deploy
+        run: bash deploy.sh

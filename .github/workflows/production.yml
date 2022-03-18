@@ -1,0 +1,26 @@
+name: deploy to production
+
+on:
+  release:
+    types:
+      - created
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+  production:
+    name: deploy
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://codeforpoznan.pl
+    if: github.repository == 'CodeForPoznan/codeforpoznan.pl_v3'
+
+    steps:
+      - uses: actions/download-artifact@v3
+
+      - name: deploy
+        run: bash deploy.sh
