@@ -62,6 +62,7 @@ runs:
 
     - run: pip install pipenv=="${{ inputs.pipenv-version }}"
       if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      working-directory: ./backend
       shell: bash
 
 
@@ -75,6 +76,7 @@ runs:
 
     - run: pipenv install --dev --deploy
       if: steps.cache-lockfile.outputs.cache-hit != 'true'
+      working-directory: ./backend
       shell: bash
       env:
         PIPENV_VENV_IN_PROJECT: 1
