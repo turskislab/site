@@ -17,21 +17,26 @@ inputs:
     default: ""
     required: false
     type: string
+  shell:
+    description: "Shell to use for command execution"
+    default: bash
+    required: false
+    type: string
 
 
 runs:
   using: composite
   steps:
     - run: echo "${NAME}=${VALUE}" >> $GITHUB_ENV
-      if: inputs.command == ''
+      if: ${{ inputs.command == '' }}
       shell: bash
       env:
         NAME: ${{ inputs.name }}
         VALUE: ${{ inputs.value }}
 
     - run: echo "${NAME}=$(${COMMAND})" >> $GITHUB_ENV
-      if: inputs.command != ''
-      shell: bash
+      if: ${{ inputs.command != '' }}
+      shell: ${{ inputs.shell }}
       env:
         NAME: ${{ inputs.name }}
         COMMAND: ${{ inputs.command }}
