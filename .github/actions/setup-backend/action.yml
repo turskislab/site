@@ -51,6 +51,11 @@ runs:
 
     - run: python3 -c 'import pipenv; print(pipenv.__file__)'
       shell: bash
+    
+    - run: python3 -m site --user-site
+      shell: bash
+
+#/opt/hostedtoolcache/Python/3.8.12/x64/lib/python3.8/site-packages/pipenv/__version__.py
 
 
     - run: ls ~/.local/${{ env.my_python }}
