@@ -1,0 +1,22 @@
+name: set-var
+description: Sets a environment variable to later use.
+
+
+inputs:
+  name:
+    description: "Name of the variable"
+    required: true
+    type: string
+  value:
+    description: "Value of the variable"
+    required: true
+    type: string
+
+
+runs:
+  using: composite
+  steps:
+    - run: echo "${NAME}=${VALUE}" >> $GITHUB_ENV
+      env:
+        NAME: ${{ inputs.name }}
+        VALUE: ${{ inputs.value }}

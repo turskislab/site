@@ -1,0 +1,55 @@
+name: setup-frontend
+description: Sets up runner environment according to frontend code needs
+
+
+inputs:
+  node-version:
+    description: "Node.js version to use. Example '12'"
+    default: '12'
+    required: false
+    type: string
+  yarn-lockfile:
+    description: "Full path to yarn lockfile. Example 'frontend/yarn.lock'"
+    default: 'frontend/yarn.lock'
+    required: false
+    type: string
+
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+
+    # configure node as specified in the input
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node-version }}
+
+
+    # set some helpful temporary variables
+    - uses: ./.github/actions/set-var
+      with:
+        name: "my_node"
+        value: node${{ inputs.node-version }}
+
+    - uses: ./.github/actions/set-var
+      with:
+        name: "my_cache_prefix"
+        value: ${{ runner.os }}-${{ env.my_node }}
+
+    - uses: ./.github/actions/set-var
+      with:
+        name: "my_yarn_hash_path"
+        value: python${{ inputs.python-version }}
+      
+
+    # set up cache for yarn installation and conditionally install it
+    - uses: actions/cache@v2
+      id: cache-yarn
+      with:
+        path: ${{ env.my_yarn_hash_path }}
+        key: ${{ env.my_cache_prefix }}-yarn-${{ hashFiles(format('{0}', inputs.yarn-lockfile)) }}
+        restore-keys: ${{ env.my_cache_prefix }}-yarn-
+
+    - run: yarn install --frozen-lockfile
+      if: steps.cache-yarn.outputs.cache-hit == 'false'
