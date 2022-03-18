@@ -17,6 +17,7 @@ runs:
   using: composite
   steps:
     - run: echo "${NAME}=${VALUE}" >> $GITHUB_ENV
+      shell: bash
       env:
         NAME: ${{ inputs.name }}
         VALUE: ${{ inputs.value }}

@@ -51,3 +51,4 @@ runs:
 
     - run: yarn install --frozen-lockfile
       if: steps.cache-yarn.outputs.cache-hit == 'false'
+      shell: bash

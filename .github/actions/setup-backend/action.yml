@@ -57,6 +57,7 @@ runs:
 
     - run: pip install pipenv=="${{ inputs.pipenv-version }}"
       if: steps.cache-pip.outputs.cache-hit == 'false'
+      shell: bash
 
 
     # set up cache for dependencies and conditionally install them
@@ -69,3 +70,4 @@ runs:
 
     - run: pipenv install --dev --deploy
       if: steps.cache-pipenv.outputs.cache-hit == 'false'
+      shell: bash

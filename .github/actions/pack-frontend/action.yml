@@ -7,6 +7,7 @@ runs:
   steps:
     - run: yarn run build --dest ../public
       working-directory: ./frontend
+      shell: bash
 
     - uses: actions/upload-artifact@v3
       with:

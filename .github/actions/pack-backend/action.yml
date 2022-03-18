@@ -7,9 +7,11 @@ runs:
   steps:
     - run: 7z a ../lambda.zip $(pipenv --venv)/lib/python*/site-packages/*
       working-directory: ./backend
+      shell: bash
 
     - run: 7z a ../lambda.zip migrations ../backend
       working-directory: ./backend
+      shell: bash
 
     - uses: actions/upload-artifact@v3
       with:
