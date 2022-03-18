@@ -23,14 +23,14 @@ runs:
   using: composite
   steps:
     - run: echo "${NAME}=${VALUE}" >> $GITHUB_ENV
-      if: inputs.command == ""
+      if: inputs.command == ''
       shell: bash
       env:
         NAME: ${{ inputs.name }}
         VALUE: ${{ inputs.value }}
 
     - run: echo "${NAME}=$(${COMMAND})" >> $GITHUB_ENV
-      if: inputs.command != ""
+      if: inputs.command != ''
       shell: bash
       env:
         NAME: ${{ inputs.name }}
