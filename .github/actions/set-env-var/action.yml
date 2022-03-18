@@ -17,11 +17,6 @@ inputs:
     default: ""
     required: false
     type: string
-  shell:
-    description: "Shell to use for command execution"
-    default: bash
-    required: false
-    type: string
 
 
 runs:
@@ -36,7 +31,7 @@ runs:
 
     - run: echo "${NAME}=$(${COMMAND})" >> $GITHUB_ENV
       if: ${{ inputs.command != '' }}
-      shell: ${{ inputs.shell }}
+      shell: bash
       env:
         NAME: ${{ inputs.name }}
         COMMAND: ${{ inputs.command }}
