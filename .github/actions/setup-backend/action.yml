@@ -23,8 +23,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v2
-
     # configure python as specified in the input
     - uses: actions/setup-python@v2
       id: setup-python

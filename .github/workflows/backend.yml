@@ -21,6 +21,7 @@ jobs:
         working-directory: backend
 
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-backend
 
       - run: pipenv run black --check .
