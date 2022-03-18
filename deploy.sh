@@ -4,6 +4,7 @@ set -Eeuo pipefail
 
 aws --version
 jq --version
+echo $AWS_ACCESS_KEY_ID
 
 aws() {
   echo $@
