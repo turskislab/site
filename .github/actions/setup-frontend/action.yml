@@ -49,6 +49,6 @@ runs:
         key: ${{ env.my_cache_prefix }}-lockfile-${{ hashFiles(format('{0}', inputs.yarn-lockfile)) }}
         restore-keys: ${{ env.my_cache_prefix }}-lockfile-
 
-    - run: yarn install --frozen-lockfile
+    - run: yarn install --frozen-lockfile --prefer-offline
       if: steps.cache-lockfile.outputs.cache-hit != 'true'
       shell: bash
