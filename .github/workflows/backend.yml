@@ -24,6 +24,12 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup-backend
 
+      - run: ls -la
+      - run: ls -lR .venv
+      - run: ls ${{ env.my_python_packages_path }}
+      - run: ls ${{ env.my_pipenv_cache_path }}
+      - run: pipenv --venv
+
       - run: pipenv run black --check .
       - run: pipenv run pytest
         env:

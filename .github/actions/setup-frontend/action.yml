@@ -35,17 +35,12 @@ runs:
         name: my_cache_prefix
         value: ${{ runner.os }}-${{ env.my_node }}
 
-    - uses: ./.github/actions/set-env-var
-      with:
-        name: my_cache_lockfile_path
-        command: yarn cache dir
-
 
     # set up cache for lockfile and conditionally install deps
     - uses: actions/cache@v2
       id: cache-lockfile
       with:
-        path: ${{ env.my_cache_lockfile_path }}
+        path: ./frontend/node_modules
         key: ${{ env.my_cache_prefix }}-lockfile-${{ hashFiles(format('{0}', inputs.yarn-lockfile)) }}
         restore-keys: ${{ env.my_cache_prefix }}-lockfile-
 
