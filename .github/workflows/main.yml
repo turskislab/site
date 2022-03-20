@@ -17,13 +17,13 @@ jobs:
   frontend:
     needs: [check-path]
     uses: ./.github/workflows/frontend.yml
-    if: jobs.check-path.outputs.frontend
+    if: needs.check-path.outputs.frontend
 
 
   backend:
     needs: [check-path]
     uses: ./.github/workflows/backend.yml
-    if: jobs.check-path.outputs.backend
+    if: needs.check-path.outputs.backend
 
 
   deploy-staging:
