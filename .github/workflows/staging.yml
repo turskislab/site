@@ -1,10 +1,13 @@
 name: staging
 
+
 on:
   push:
     branches:
       - master
+  pull_request: # todo: remove
   workflow_dispatch:
+
 
 jobs:
   staging:
@@ -17,10 +20,10 @@ jobs:
       #if: github.repository == 'turskislab/site'
 
     steps:
-      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v3
-
-      - run: ls -la
-
-      - name: deploy
-        run: bash deploy.sh
+      - uses: ./.github/actions/deploy
+        env:
+          AWS_RESOURCE_NAME: ${{ secrets.AWS_RESOURCE_NAME }}
+          AWS_CLOUDFRONT_ID: ${{ secrets.AWS_CLOUDFRONT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

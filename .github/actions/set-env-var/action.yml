@@ -1,0 +1,42 @@
+name: set-env-var
+description: Sets a environment variable to later use.
+
+
+inputs:
+  name:
+    description: "Name of the variable"
+    required: true
+    type: string
+  value:
+    description: "Value of the variable"
+    default: ""
+    required: false
+    type: string
+  command:
+    description: "Command to use for value"
+    default: ""
+    required: false
+    type: string
+
+
+runs:
+  using: composite
+  steps:
+    - run: echo "${NAME}=${VALUE}" >> $GITHUB_ENV
+      if: inputs.command == ''
+      shell: bash
+      env:
+        NAME: ${{ inputs.name }}
+        VALUE: ${{ inputs.value }}
+
+    - run: echo "::set-output name=stdout::$(${{ inputs.command }})"
+      if: inputs.command != ''
+      id: command
+      shell: bash
+
+    - run: echo "${NAME}=${VALUE}" >> $GITHUB_ENV
+      if: inputs.command != ''
+      shell: bash
+      env:
+        NAME: ${{ inputs.name }}
+        VALUE: ${{ steps.command.outputs.stdout }}

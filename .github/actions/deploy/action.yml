@@ -1,0 +1,9 @@
+name: deploy
+description: Deploys frontend and backend to AWS.
+
+
+runs:
+  using: composite
+  steps:
+    - run: ls -la
+      shell: bash

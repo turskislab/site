@@ -1,14 +1,16 @@
 name: frontend
 
+
 on:
   push:
+    branches:
+      - master
     paths:
       - 'frontend/**'
-    branches:
-      - 'master'
   pull_request:
     paths:
       - 'frontend/**'
+
 
 jobs:
   frontend:
@@ -20,23 +22,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '12'
-          cache: 'yarn'
-          cache-dependency-path: 'frontend/yarn.lock'
+      - uses: ./.github/actions/setup-frontend
 
-      - run: yarn install --frozen-lockfile
       - run: yarn run lint
       - run: yarn run test
 
-      - run: yarn run build --dest ../public
-        if: github.ref == 'refs/heads/master'
-
-      - uses: actions/upload-artifact@v3
-        if: github.ref == 'refs/heads/master'
-        with:
-          name: frontend
-          path: public
-          retention-days: 1
-
+      - uses: ./.github/actions/pack-frontend
+        if: github.event_name == 'push'

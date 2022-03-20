@@ -1,14 +1,16 @@
 name: backend
 
+
 on:
   push:
+    branches:
+      - master
     paths:
       - 'backend/**'
-    branches:
-      - 'master'
   pull_request:
     paths:
       - 'backend/**'
+
 
 jobs:
   backend:
@@ -20,14 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-          cache: 'pipenv'
-          cache-dependency-path: 'backend/Pipfile.lock'
+      - uses: ./.github/actions/setup-backend
 
-      - run: pip install pipenv==2022.1.8
-      - run: pipenv install --dev --deploy
       - run: pipenv run black --check .
       - run: pipenv run pytest
         env:
@@ -46,13 +42,5 @@ jobs:
           MAIL_PASSWORD: ''
           MAIL_SUPPRESS_SEND: 'TRUE'
 
-      - run: 7z a ../lambda.zip $(pipenv --venv)/lib/*/*/* migrations ../backend
-        if: github.ref == 'refs/heads/master'
-
-      - uses: actions/upload-artifact@v3
-        if: github.ref == 'refs/heads/master'
-        with:
-          name: backend
-          path: lambda.zip
-          retention-days: 1
-
+      - uses: ./.github/actions/pack-backend
+        if: github.event_name == 'push'

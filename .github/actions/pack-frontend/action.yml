@@ -1,0 +1,16 @@
+name: pack-frontend
+description: Packs up frontend for deployment and uploads to artifact.
+
+
+runs:
+  using: composite
+  steps:
+    - run: yarn run build --dest ../public
+      working-directory: ./frontend
+      shell: bash
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: frontend
+        path: public
+        retention-days: 1
