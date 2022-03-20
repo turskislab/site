@@ -28,6 +28,11 @@ jobs:
       - run: ls -lR .venv
       - run: ls ${{ env.my_python_packages_path }}
       - run: ls ${{ env.my_pipenv_cache_path }}
+      - run: ls ${{ env.my_python_packages_path }}
+      - run: ls ${{ env.pythonLocation }}
+      - run: ls ${{ env.pythonLocation }}/bin
+      - run: python --version
+      - run: python -m pipenv --venv
       - run: pipenv --venv
 
       - run: pipenv run black --check .
