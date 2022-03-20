@@ -31,7 +31,7 @@ jobs:
           name: my_backend_check
           command: git diff-index --name-only HEAD | grep ^backend/
 
-        run: echo "::set-output name=modified::${{ env.my_frontend_check }}"
+      - run: echo "::set-output name=modified::${{ env.my_frontend_check }}"
         id: frontend
 
       - run: echo "::set-output name=modified::${{ env.my_backend_check }}"
