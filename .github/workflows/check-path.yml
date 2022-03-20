@@ -19,7 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+      
+      - run: git diff-index --name-only HEAD | grep ^frontend/
+        shell: bash
+      
+      - run: git diff-index --name-only HEAD
+        shell: bash
 
       - uses: ./.github/actions/set-env-var
         with:
