@@ -3,6 +3,9 @@ name: frontend
 
 on:
   workflow_call:
+  pull_request:
+    branches: [master]
+    paths: ['frontend/**']
 
 
 jobs:
@@ -21,4 +24,4 @@ jobs:
       - run: yarn run test
 
       - uses: ./.github/actions/pack-frontend
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'

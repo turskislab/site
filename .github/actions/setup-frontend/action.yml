@@ -1,5 +1,5 @@
 name: setup-frontend
-description: Sets up runner environment according to frontend code needs
+description: Sets up runner environment according to frontend code needs.
 
 
 inputs:
@@ -8,11 +8,14 @@ inputs:
     default: '12'
     required: false
     type: string
-  yarn-lockfile:
-    description: "Full path to yarn lockfile. Example 'frontend/yarn.lock'"
-    default: 'frontend/yarn.lock'
+  working-directory:
+    description: "Path to the lock file. Example './frontend'"
+    default: './'
     required: false
     type: string
+  package-manager:
+    description: "Name of the package manager to use."
+  
 
 
 runs:
@@ -27,23 +30,32 @@ runs:
     # set some helpful temporary variables
     - uses: ./.github/actions/set-env-var
       with:
-        name: my_node
-        value: node${{ inputs.node-version }}
-
-    - uses: ./.github/actions/set-env-var
-      with:
         name: my_cache_prefix
-        value: ${{ runner.os }}-${{ env.my_node }}
-
-
-    # set up cache for lockfile and conditionally install deps
-    - uses: actions/cache@v2
-      id: cache-lockfile
+        value: ${{ runner.os }}-node${{ inputs.node-version }}
+    
+    - uses: ./.github/actions/set-env-var
+      if: ${{ contains(inputs.lockfile-path, 'yarn') }}
       with:
-        path: ./frontend/node_modules
-        key: ${{ env.my_cache_prefix }}-lockfile-${{ hashFiles(format('{0}', inputs.yarn-lockfile)) }}
-        restore-keys: ${{ env.my_cache_prefix }}-lockfile-
+        name: my_yarn_cache_path
+        command: yarn cache dir
+    
+    - uses: ./.github/actions/set-env-var
+      if: ${{ contains(inputs.lockfile-path, 'package') }}
+      with:
+        name: my_npm_cache_path
+        command: npm get cache
 
-    - run: yarn install --frozen-lockfile --prefer-offline
-      if: steps.cache-lockfile.outputs.cache-hit != 'true'
+
+    # set up cache for yarn lockfile and conditionally install deps
+    - uses: actions/cache@v2
+      id: cache-yarn-lockfile
+      with:
+        path: |
+          **/node_modules
+          ${{ env.my_yarn_cache_path }}
+        key: ${{ env.my_cache_prefix }}-yarn-lockfile-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: ${{ env.my_cache_prefix }}-yarn-lockfile-
+
+    - run: yarn install --frozen-lockfile --prefer-offline --non-interactive --ignore-scripts
+      if: steps.cache-yarn-lockfile.outputs.cache-hit != 'true'
       shell: bash
