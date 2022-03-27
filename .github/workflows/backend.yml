@@ -2,14 +2,10 @@ name: backend
 
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'backend/**'
+  workflow_call:
   pull_request:
-    paths:
-      - 'backend/**'
+    branches: [master]
+    paths: ['backend/**']
 
 
 jobs:
@@ -43,4 +39,4 @@ jobs:
           MAIL_SUPPRESS_SEND: 'TRUE'
 
       - uses: ./.github/actions/pack-backend
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'

@@ -44,25 +44,18 @@ runs:
 
     # set up cache for pipenv installation and conditionally install it
     - uses: actions/cache@v2
-      id: cache-pipenv-package
+      id: cache-pipenv
       with:
-        path: ${{ env.pythonLocation }}/lib/${{ env.my_python }}/site-packages/pipenv
-        key: ${{ env.my_cache_prefix }}-pipenv-package-${{ inputs.pipenv-version }}
-        restore-keys: ${{ env.my_cache_prefix }}-pipenv-package-
-
-    - uses: actions/cache@v2
-      id: cache-pipenv-binary
-      with:
-        path: ${{ env.pythonLocation }}/bin/pipenv
-        key: ${{ env.my_cache_prefix }}-pipenv-binary-${{ inputs.pipenv-version }}
-        restore-keys: ${{ env.my_cache_prefix }}-pipenv-binary-
+        path: |
+          ${{ env.pythonLocation }}/bin/pipenv
+          ${{ env.pythonLocation }}/lib/${{ env.my_python }}/site-packages/pipenv
+        key: ${{ env.my_cache_prefix }}-pipenv-${{ inputs.pipenv-version }}
+        restore-keys: ${{ env.my_cache_prefix }}-pipenv-
 
     - run: pip install pipenv=="${{ inputs.pipenv-version }}"
       working-directory: ./backend
       shell: bash
-      if: >
-        steps.cache-pipenv-package.outputs.cache-hit != 'true' || 
-        steps.cache-pipenv-binary.outputs.cache-hit != 'true'
+      if: steps.cache-pipenv.outputs.cache-hit != 'true'
 
 
     # set up cache for lockfile and conditionally install dependencies
