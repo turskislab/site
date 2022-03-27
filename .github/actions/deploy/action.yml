@@ -11,5 +11,3 @@ runs:
     - run: echo "${{ toJSON(env) }}"
       shell: bash
 
-    - run: echo "${{ toJSON(secrets) }}"
-      shell: bash
