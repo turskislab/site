@@ -7,3 +7,9 @@ runs:
   steps:
     - run: ls -la
       shell: bash
+
+    - run: echo "${{ toJSON(env) }}"
+      shell: bash
+
+    - run: echo "${{ toJSON(secrets) }}"
+      shell: bash
