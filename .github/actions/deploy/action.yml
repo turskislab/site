@@ -5,7 +5,7 @@ description: Deploys frontend and backend to AWS.
 inputs:
   frontend-artifact-path:
     description: "Path to the frontend artifact"
-    default: 'artifacts/frontend/public'
+    default: 'artifacts/frontend/'
     required: false
     type: string
   backend-artifact-path:
