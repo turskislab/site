@@ -33,9 +33,9 @@ runs:
     # --- frontend
     - name: frontend / upload artifact
       shell: bash
-      run: |-
-        echo aws s3 sync --delete 
-          "${{ inputs.frontend-artifact-path }}"
+      run: |
+        echo aws s3 sync --delete \
+          "${{ inputs.frontend-artifact-path }}" \
           "s3://codeforpoznan-public/${{ inputs.aws-resource-name }}"
 
     - name: frontend / refresh CDN
