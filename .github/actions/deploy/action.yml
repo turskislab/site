@@ -27,6 +27,10 @@ runs:
   using: composite
   steps:
 
+    - id: check-frontend
+      shell: bash
+      run: ls -R
+
     # --- frontend -------------------------
     - id: check-frontend
       shell: bash
