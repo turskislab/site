@@ -67,8 +67,7 @@ runs:
         echo aws lambda update-function-code
         --s3-bucket     "codeforpoznan-lambdas"
         --s3-key        "${{ inputs.aws-resource-name }}_serverless_api.zip"
-        --function-name "${{ inputs.aws-resource-name }}_serverless_api" | 
-        jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
+        --function-name "${{ inputs.aws-resource-name }}_serverless_api"
 
     - name: backend / refresh lambdas (migration)
       shell: bash
@@ -77,7 +76,6 @@ runs:
         --s3-bucket     "codeforpoznan-lambdas"
         --s3-key        "${{ inputs.aws-resource-name }}_migration.zip"
         --function-name "${{ inputs.aws-resource-name }}_migration"
-        | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
     - name: backend / run migration lambda
       shell: bash
