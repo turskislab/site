@@ -38,7 +38,7 @@ runs:
     - name: upload frontend artifact
       if: steps.check-frontend.outcome == 'success'
       shell: bash
-      run: |
+      run: >
         echo aws s3 sync --delete 
           "${{ inputs.frontend-artifact-path }}"
           "s3://codeforpoznan-public/${{ inputs.aws-resource-name }}"
@@ -46,7 +46,7 @@ runs:
     - name: refresh frontend CDN
       if: steps.check-frontend.outcome == 'success'
       shell: bash
-      run: |
+      run: >
         echo aws cloudfront create-invalidation
           --paths "/+"
           --distribution-id "${{ inputs.aws-cloudfront-id }}"
@@ -60,10 +60,12 @@ runs:
     - name: upload backend artifact
       if: steps.check-backend.outcome == 'success'
       shell: bash
-      run: |
+      run: >
         echo aws s3 cp 
           "${{ inputs.backend-artifact-path }}"
           "s3://codeforpoznan-lambdas/${{ inputs.aws-resource-name }}_serverless_api.zip"
+
+        &&
 
         echo aws s3 cp
           "${{ inputs.backend-artifact-path }}"
@@ -72,12 +74,14 @@ runs:
     - name: refresh backend lambdas
       if: steps.check-backend.outcome == 'success'
       shell: bash
-      run: |
+      run: >
         echo aws lambda update-function-code
           --s3-bucket     "codeforpoznan-lambdas"
           --s3-key        "${{ env.aws-resource-name }}_serverless_api.zip"
           --function-name "${{ env.aws-resource-name }}_serverless_api"
           | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
+        
+        &&
 
         echo aws lambda update-function-code
           --s3-bucket     "codeforpoznan-lambdas"
@@ -88,7 +92,7 @@ runs:
     - name: run backend migration lambda
       if: steps.check-backend.outcome == 'success'
       shell: bash
-      run: |
+      run: >
         echo aws lambda invoke
           --function-name "${uuuRESOURCE}_migration"
           response.json
@@ -97,7 +101,7 @@ runs:
     # - name: show backend migration lambda output
     #   if: steps.check-backend.outcome == 'success'
     #   shell: bash
-    #   run: |
+    #   run: >
     #     jq -s add ./*.json
     #     | jq -re '
     #       if .FunctionError then
