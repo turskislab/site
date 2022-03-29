@@ -68,7 +68,6 @@ runs:
         --s3-bucket     "codeforpoznan-lambdas"
         --s3-key        "${{ inputs.aws-resource-name }}_serverless_api.zip"
         --function-name "${{ inputs.aws-resource-name }}_serverless_api"
-        | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
     - name: backend / refresh lambdas (migration)
       shell: bash
