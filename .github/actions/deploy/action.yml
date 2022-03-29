@@ -36,7 +36,7 @@ runs:
       if: steps.check-frontend.outcome == 'success'
       shell: bash
       run: |
-        aws s3 sync --delete 
+        echo aws s3 sync --delete 
           "${{ inputs.frontend-artifact-path }}"
           "s3://codeforpoznan-public/${{ inputs.aws-resource-name }}"
 
@@ -44,7 +44,7 @@ runs:
       if: steps.check-frontend.outcome == 'success'
       shell: bash
       run: |
-        aws cloudfront create-invalidation
+        echo aws cloudfront create-invalidation
           --paths "/+"
           --distribution-id "${{ inputs.aws-cloudfront-id }}"
 
@@ -58,11 +58,11 @@ runs:
       if: steps.check-backend.outcome == 'success'
       shell: bash
       run: |
-        aws s3 cp 
+        echo aws s3 cp 
           "${{ inputs.backend-artifact-path }}"
           "s3://codeforpoznan-lambdas/${{ inputs.aws-resource-name }}_serverless_api.zip"
 
-        aws s3 cp
+        echo aws s3 cp
           "${{ inputs.backend-artifact-path }}"
           "s3://codeforpoznan-lambdas/${{ inputs.aws-resource-name }}_migration.zip"
 
@@ -70,36 +70,36 @@ runs:
       if: steps.check-backend.outcome == 'success'
       shell: bash
       run: |
-        aws lambda update-function-code
+        echo aws lambda update-function-code
           --s3-bucket     "codeforpoznan-lambdas"
           --s3-key        "${{ env.aws-resource-name }}_serverless_api.zip"
           --function-name "${{ env.aws-resource-name }}_serverless_api"
-        | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
+#        | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
-        aws lambda update-function-code
+        echo aws lambda update-function-code
           --s3-bucket     "codeforpoznan-lambdas"
           --s3-key        "${{ env.aws-resource-name }}_migration.zip"
           --function-name "${{ env.aws-resource-name }}_migration"
-        | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
+#        | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
     - name: run backend migration lambda
       if: steps.check-backend.outcome == 'success'
       shell: bash
       run: |
-        aws lambda invoke
+        echo aws lambda invoke
           --function-name "${uuuRESOURCE}_migration"
           response.json
-        > request.json
+#        > request.json
 
-    - name: show backend migration lambda output
-      if: steps.check-backend.outcome == 'success'
-      shell: bash
-      run: |
-        jq -s add ./*.json
-        | jq -re '
-          if .FunctionError then
-            .FunctionError, .errorMessage, false
-          else
-            .stdout, .stderr
-          end
-        '
+    # - name: show backend migration lambda output
+    #   if: steps.check-backend.outcome == 'success'
+    #   shell: bash
+    #   run: |
+    #     jq -s add ./*.json
+    #     | jq -re '
+    #       if .FunctionError then
+    #         .FunctionError, .errorMessage, false
+    #       else
+    #         .stdout, .stderr
+    #       end
+    #     '

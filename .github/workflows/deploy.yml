@@ -12,11 +12,20 @@ on:
         description: 'URL of the environment to deploy'
         required: true
         type: string
+    secrets:
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+      aws-resource-name:
+        required: true
+      aws-cloudfront-id:
+        required: true
 
 
 jobs:
   deploy:
-    name: deploy
+    name: to ${{ inputs.environment-name }}
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.environment-name }}
@@ -27,10 +36,10 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: eu-west-1
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
 
       - uses: ./.github/actions/deploy
         with:
-          aws-resource-name: ${{ secrets.AWS_RESOURCE_NAME }}
-          aws-cloudfront-id: ${{ secrets.AWS_CLOUDFRONT_ID }}
+          aws-resource-name: ${{ secrets.aws-resource-name }}
+          aws-cloudfront-id: ${{ secrets.aws-cloudfront-id }}
