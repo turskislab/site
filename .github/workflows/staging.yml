@@ -1,10 +1,10 @@
-name: main
+name: staging
 
 
 on:
+  workflow_dispatch:
   push:
     branches: [master]
-  workflow_dispatch:
 
 
 jobs:
@@ -20,18 +20,6 @@ jobs:
     with:
       environment-name: staging
       environment-url: https://dev.codeforpoznan.pl
-    secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws-resource-name: ${{ secrets.AWS_RESOURCE_NAME }}
-      aws-cloudfront-id: ${{ secrets.AWS_CLOUDFRONT_ID }}
-
-  production:
-    uses: ./.github/workflows/deploy.yml
-    needs: [staging]
-    with:
-      environment-name: production
-      environment-url: https://codeforpoznan.pl
     secrets:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
