@@ -33,14 +33,14 @@ runs:
     # --- frontend
     - name: frontend / upload artifact
       shell: bash
-      run: |
+      run: >
         echo aws s3 sync --delete
         "${{ inputs.frontend-artifact-path }}"
         "s3://codeforpoznan-public/${{ inputs.aws-resource-name }}"
 
     - name: frontend / refresh CDN
       shell: bash
-      run: |
+      run: >
         echo aws cloudfront create-invalidation
         --paths "/+"
         --distribution-id "${{ inputs.aws-cloudfront-id }}"
