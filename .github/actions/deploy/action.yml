@@ -27,8 +27,7 @@ runs:
   using: composite
   steps:
 
-    - id: check-frontend
-      shell: bash
+    - shell: bash
       run: ls -R
 
     # --- frontend -------------------------
