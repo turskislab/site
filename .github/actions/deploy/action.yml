@@ -30,21 +30,15 @@ runs:
     - shell: bash
       run: ls -R
 
-    # --- frontend -------------------------
-    - id: check-frontend
-      shell: bash
-      run: ls ${{ inputs.frontend-artifact-path }} > /dev/null
-
-    - name: upload frontend artifact
-      if: steps.check-frontend.outcome == 'success'
+    # --- frontend
+    - name: frontend / upload artifact
       shell: bash
       run: >
         echo aws s3 sync --delete 
           "${{ inputs.frontend-artifact-path }}"
           "s3://codeforpoznan-public/${{ inputs.aws-resource-name }}"
 
-    - name: refresh frontend CDN
-      if: steps.check-frontend.outcome == 'success'
+    - name: frontend / refresh CDN
       shell: bash
       run: >
         echo aws cloudfront create-invalidation
@@ -52,13 +46,8 @@ runs:
           --distribution-id "${{ inputs.aws-cloudfront-id }}"
 
 
-    # --- backend -------------------------
-    - id: check-backend
-      shell: bash
-      run: ls ${{ inputs.backend-artifact-path }} > /dev/null
-
-    - name: upload backend artifact
-      if: steps.check-backend.outcome == 'success'
+    # --- backend
+    - name: backend / upload artifact
       shell: bash
       run: >
         echo aws s3 cp 
@@ -71,8 +60,7 @@ runs:
           "${{ inputs.backend-artifact-path }}"
           "s3://codeforpoznan-lambdas/${{ inputs.aws-resource-name }}_migration.zip"
 
-    - name: refresh backend lambdas
-      if: steps.check-backend.outcome == 'success'
+    - name: backend / refresh lambdas
       shell: bash
       run: >
         echo aws lambda update-function-code
@@ -89,24 +77,22 @@ runs:
           --function-name "${{ env.aws-resource-name }}_migration"
           | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
-    - name: run backend migration lambda
-      if: steps.check-backend.outcome == 'success'
+    - name: backend / run migration lambda
       shell: bash
       run: >
         echo aws lambda invoke
           --function-name "${uuuRESOURCE}_migration"
           response.json
+        > request.json
 
-    #     > request.json
-    # - name: show backend migration lambda output
-    #   if: steps.check-backend.outcome == 'success'
-    #   shell: bash
-    #   run: >
-    #     jq -s add ./*.json
-    #     | jq -re '
-    #       if .FunctionError then
-    #         .FunctionError, .errorMessage, false
-    #       else
-    #         .stdout, .stderr
-    #       end
-    #     '
+    - name: backend / show migration output
+      shell: bash
+      run: >
+        jq -s add ./*.json
+        | jq -re '
+          if .FunctionError then
+            .FunctionError, .errorMessage, false
+          else
+            .stdout, .stderr
+          end
+        '
