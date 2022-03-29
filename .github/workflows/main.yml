@@ -1,0 +1,32 @@
+name: main
+
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+
+jobs:
+  frontend:
+    uses: ./.github/workflows/frontend.yml
+
+
+  backend:
+    uses: ./.github/workflows/backend.yml
+
+
+  staging:
+    uses: ./.github/workflows/deploy.yml
+    needs: [frontend, backend]
+    with:
+      environment-name: staging
+      environment-url: https://dev.codeforpoznan.pl
+
+
+  production:
+    uses: ./.github/workflows/deploy.yml
+    needs: [staging]
+    with:
+      environment-name: production
+      environment-url: https://codeforpoznan.pl

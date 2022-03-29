@@ -34,13 +34,13 @@ runs:
         value: ${{ runner.os }}-node${{ inputs.node-version }}
     
     - uses: ./.github/actions/set-env-var
-      if: ${{ contains(inputs.lockfile-path, 'yarn') }}
+      if: contains(inputs.lockfile-path, 'yarn')
       with:
         name: my_yarn_cache_path
         command: yarn cache dir
     
     - uses: ./.github/actions/set-env-var
-      if: ${{ contains(inputs.lockfile-path, 'package') }}
+      if: contains(inputs.lockfile-path, 'package')
       with:
         name: my_npm_cache_path
         command: npm get cache
@@ -49,6 +49,7 @@ runs:
     # set up cache for yarn lockfile and conditionally install deps
     - uses: actions/cache@v2
       id: cache-yarn-lockfile
+      if: contains(inputs.lockfile-path, 'yarn')
       with:
         path: |
           **/node_modules
@@ -57,5 +58,23 @@ runs:
         restore-keys: ${{ env.my_cache_prefix }}-yarn-lockfile-
 
     - run: yarn install --frozen-lockfile --prefer-offline --non-interactive --ignore-scripts
-      if: steps.cache-yarn-lockfile.outputs.cache-hit != 'true'
+      if: contains(inputs.lockfile-path, 'yarn') && steps.cache-yarn-lockfile.outputs.cache-hit != 'true'
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+
+    # set up cache for npm lockfile and conditionally install deps
+    - uses: actions/cache@v2
+      id: cache-npm-lockfile
+      if: contains(inputs.lockfile-path, 'package')
+      with:
+        path: |
+          **/node_modules
+          ${{ env.my_npm_cache_path }}
+        key: ${{ env.my_cache_prefix }}-npm-lockfile-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ env.my_cache_prefix }}-npm-lockfile-
+
+    - run: npm clean-install --ignore-scripts --no-audit
+      if: contains(inputs.lockfile-path, 'package') && steps.cache-npm-lockfile.outputs.cache-hit != 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
