@@ -87,7 +87,7 @@ runs:
     - name: backend / show migration output
       shell: bash
       run: >
-        jq -s add ./*.json | jq -re '
+        echo jq -s add ./*.json | jq -re '
           if .FunctionError then
             .FunctionError, .errorMessage, false
           else
