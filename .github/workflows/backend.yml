@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: turskislab/.github/.github/actions/setup-backend@v2
+      - uses: turskislab/.github/.github/actions/setup-backend@v3
 
       - run: pipenv run black --check .
       - run: pipenv run pytest
@@ -38,5 +38,5 @@ jobs:
           MAIL_PASSWORD:
           MAIL_SUPPRESS_SEND: TRUE
 
-      - uses: turskislab/.github/.github/actions/pack-backend@v2
+      - uses: turskislab/.github/.github/actions/pack-backend@v3
         if: github.event_name != 'pull_request'

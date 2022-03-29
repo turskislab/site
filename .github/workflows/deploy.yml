@@ -41,12 +41,12 @@ jobs:
           aws-access-key-id: ${{ secrets.aws-access-key-id }}
           aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
 
-      - uses: turskislab/.github/.github/actions/deploy-backend@v2
+      - uses: turskislab/.github/.github/actions/deploy-backend@v3
         with:
           aws-resource-name: ${{ secrets.aws-resource-name }}
           aws-cloudfront-id: ${{ secrets.aws-cloudfront-id }}
 
-      - uses: turskislab/.github/.github/actions/deploy-frontend@v2
+      - uses: turskislab/.github/.github/actions/deploy-frontend@v3
         with:
           aws-resource-name: ${{ secrets.aws-resource-name }}
           aws-cloudfront-id: ${{ secrets.aws-cloudfront-id }}
