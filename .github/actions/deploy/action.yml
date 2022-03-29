@@ -40,9 +40,9 @@ runs:
 
     - name: frontend / refresh CDN
       shell: bash
-      run: >
-        echo aws cloudfront create-invalidation
-          --paths "/+"
+      run: |
+        echo aws cloudfront create-invalidation \
+          --paths "/+" \
           --distribution-id "${{ inputs.aws-cloudfront-id }}"
 
 
@@ -50,46 +50,41 @@ runs:
     - name: backend / upload artifact
       shell: bash
       run: >
-        echo aws s3 cp 
-          "${{ inputs.backend-artifact-path }}"
-          "s3://codeforpoznan-lambdas/${{ inputs.aws-resource-name }}_serverless_api.zip"
-
-        &&
-
-        echo aws s3 cp
-          "${{ inputs.backend-artifact-path }}"
+        echo aws s3 cp \
+          "${{ inputs.backend-artifact-path }}" \
+          "s3://codeforpoznan-lambdas/${{ inputs.aws-resource-name }}_serverless_api.zip" \
+        && \
+        echo aws s3 cp \
+          "${{ inputs.backend-artifact-path }}" \
           "s3://codeforpoznan-lambdas/${{ inputs.aws-resource-name }}_migration.zip"
 
     - name: backend / refresh lambdas
       shell: bash
       run: >
-        echo aws lambda update-function-code
-          --s3-bucket     "codeforpoznan-lambdas"
-          --s3-key        "${{ env.aws-resource-name }}_serverless_api.zip"
-          --function-name "${{ env.aws-resource-name }}_serverless_api"
-          | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
-        
-        &&
-
-        echo aws lambda update-function-code
-          --s3-bucket     "codeforpoznan-lambdas"
-          --s3-key        "${{ env.aws-resource-name }}_migration.zip"
-          --function-name "${{ env.aws-resource-name }}_migration"
+        echo aws lambda update-function-code \
+          --s3-bucket     "codeforpoznan-lambdas" \
+          --s3-key        "${{ env.aws-resource-name }}_serverless_api.zip" \
+          --function-name "${{ env.aws-resource-name }}_serverless_api" \
+          | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)' \
+        && \
+        echo aws lambda update-function-code \
+          --s3-bucket     "codeforpoznan-lambdas" \
+          --s3-key        "${{ env.aws-resource-name }}_migration.zip" \
+          --function-name "${{ env.aws-resource-name }}_migration" \
           | jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
     - name: backend / run migration lambda
       shell: bash
       run: >
-        echo aws lambda invoke
-          --function-name "${uuuRESOURCE}_migration"
-          response.json
+        echo aws lambda invoke \
+          --function-name "${uuuRESOURCE}_migration" \
+          response.json \
         > request.json
 
     - name: backend / show migration output
       shell: bash
       run: >
-        jq -s add ./*.json
-        | jq -re '
+        jq -s add ./*.json | jq -re '
           if .FunctionError then
             .FunctionError, .errorMessage, false
           else
