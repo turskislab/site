@@ -33,6 +33,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+
       # - uses: aws-actions/configure-aws-credentials@v1
       #   with:
       #     aws-region: eu-west-1

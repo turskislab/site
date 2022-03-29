@@ -5,12 +5,12 @@ description: Deploys frontend and backend to AWS.
 inputs:
   frontend-artifact-path:
     description: "Path to the frontend artifact"
-    default: 'frontend/public'
+    default: 'artifacts/frontend/public'
     required: false
     type: string
   backend-artifact-path:
     description: "Path to the frontend artifact"
-    default: 'backend/lambda.zip'
+    default: 'artifacts/backend/lambda.zip'
     required: false
     type: string
   aws-resource-name:
