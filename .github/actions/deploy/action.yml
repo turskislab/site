@@ -68,6 +68,7 @@ runs:
         --s3-bucket     "codeforpoznan-lambdas"
         --s3-key        "${{ inputs.aws-resource-name }}_serverless_api.zip"
         --function-name "${{ inputs.aws-resource-name }}_serverless_api"
+        | echo jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
     - name: backend / refresh lambdas (migration)
       shell: bash
@@ -76,6 +77,7 @@ runs:
         --s3-bucket     "codeforpoznan-lambdas"
         --s3-key        "${{ inputs.aws-resource-name }}_migration.zip"
         --function-name "${{ inputs.aws-resource-name }}_migration"
+        | echo jq 'del(.Environment, .VpcConfig, .Role, .FunctionArn)'
 
     - name: backend / run migration lambda
       shell: bash
@@ -87,7 +89,7 @@ runs:
     - name: backend / show migration output
       shell: bash
       run: >
-        echo jq -s add ./*.json | jq -re '
+        echo jq -s add ./*.json | echo jq -re '
           if .FunctionError then
             .FunctionError, .errorMessage, false
           else
