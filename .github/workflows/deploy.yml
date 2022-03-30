@@ -30,7 +30,6 @@ jobs:
       url: ${{ inputs.environment-url }}
     steps:
       - uses: actions/checkout@v2
-
       - uses: actions/download-artifact@v3
         with:
           path: artifacts
@@ -41,12 +40,12 @@ jobs:
           aws-access-key-id: ${{ secrets.aws-access-key-id }}
           aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
 
-      - uses: turskislab/.github/.github/actions/deploy-backend@v3
+      - uses: turskislab/.github/.github/actions/deploy-frontend@v3
         with:
           aws-resource-name: ${{ secrets.aws-resource-name }}
           aws-cloudfront-id: ${{ secrets.aws-cloudfront-id }}
 
-      - uses: turskislab/.github/.github/actions/deploy-frontend@v3
+      - uses: turskislab/.github/.github/actions/deploy-backend@v3
         with:
           aws-resource-name: ${{ secrets.aws-resource-name }}
           aws-cloudfront-id: ${{ secrets.aws-cloudfront-id }}
