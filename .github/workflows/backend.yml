@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: turskislab/.github/.github/actions/setup-backend@v5
 
-      - uses: mxschmitt/action-tmate@v3
+      # - uses: mxschmitt/action-tmate@v3
 
       - run: pipenv run black --check .
       - run: pipenv run pytest
