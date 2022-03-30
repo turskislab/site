@@ -48,8 +48,6 @@ export const interceptorRefresh = axios.interceptors.response.use(
   }
 );
 
-console.log('lol, testing');
-
 new Vue({
   router,
   store,
