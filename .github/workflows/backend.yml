@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: turskislab/.github/.github/actions/setup-backend@v4
+      - uses: turskislab/.github/.github/actions/setup-backend@v5
 
       - uses: mxschmitt/action-tmate@v3
 
@@ -40,5 +40,5 @@ jobs:
           MAIL_PASSWORD:
           MAIL_SUPPRESS_SEND: TRUE
 
-      - uses: turskislab/.github/.github/actions/pack-backend@v4
+      - uses: turskislab/.github/.github/actions/pack-backend@v5
         if: github.event_name != 'pull_request'
