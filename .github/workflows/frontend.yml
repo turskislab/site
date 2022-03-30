@@ -18,10 +18,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: turskislab/.github/.github/actions/setup-frontend@v6
+      - uses: turskislab/.github/.github/actions/setup-frontend@v8
 
       - run: yarn run lint
       - run: yarn run test
 
-      - uses: turskislab/.github/.github/actions/pack-frontend@v6
+      - uses: turskislab/.github/.github/actions/pack-frontend@v8
         if: github.event_name != 'pull_request'
