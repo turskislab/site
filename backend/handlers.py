@@ -10,6 +10,7 @@ from backend.helpers import wrap_io
 def api(event, context):
     event["headers"]["Host"] = os.environ["BASE_URL"]
     print("REQUEST: ", event)
+    print("REQUEST: ", event)
     return handle_request(create_app(), event, context)
 
 
