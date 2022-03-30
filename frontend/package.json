@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "mkdir -p ../public && echo '<body><h1>hello</h1></body>' > ../public/index.html; true ",
+    "build": "mkdir -p ../public && echo '<body><h1>hello world</h1></body>' > ../public/index.html; true ",
     "test": "true",
     "lint": "true"
   },
