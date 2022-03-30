@@ -3,15 +3,48 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "mkdir -p ../public && echo '<body><h1>hello world</h1></body>' > ../public/index.html; true ",
-    "test": "true",
-    "lint": "true"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test": "vue-cli-service test:unit --collect-coverage",
+    "test:watch": "vue-cli-service test:unit --watch",
+    "lint": "vue-cli-service lint --no-fix --max-warnings 0",
+    "lint:fix": "vue-cli-service lint "
   },
   "dependencies": {
-    "vue": "^2.6.10"
+    "@mdi/font": "^4.5.95",
+    "apexcharts": "^3.27.1",
+    "axios": "^0.21.1",
+    "eslint-plugin-jest": "^24.5.0",
+    "lodash": "^4.17.21",
+    "vue": "^2.6.10",
+    "vue-apexcharts": "^1.6.1",
+    "vue-router": "^3.3.4",
+    "vue-scrollactive": "^0.9.3",
+    "vuelidate": "^0.7.4",
+    "vuetify": "^2.3.0",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "eslint": "^5.8.0"
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
+    "@vue/cli-service": "^3.8.0",
+    "@vue/test-utils": "^1.0.3",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-vue": "^5.0.0-beta.4",
+    "husky": "^2.3.0",
+    "prettier": "^1.17.1",
+    "sass": "^1.22.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "vue-cli-plugin-vuetify": "^0.6.3",
+    "vue-template-compiler": "^2.6.10",
+    "vuetify-loader": "^1.3.0",
+    "webpack": "^4.39.3"
   },
   "postcss": {
     "plugins": {

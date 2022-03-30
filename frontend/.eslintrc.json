@@ -1,0 +1,41 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "jest/globals": true
+  },
+  "plugins": ["prettier", "jest"],
+  "extends": [
+    "plugin:vue/essential",
+    "eslint:recommended",
+    "plugin:import/errors"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-multi-spaces": ["error", { "ignoreEOLComments": false }],
+    "import/no-extraneous-dependencies": ["error"],
+    "eol-last": ["error", "always"],
+    "no-multiple-empty-lines": [
+      "error",
+      { "max": 2, "maxBOF": 0, "maxEOF": 1 }
+    ],
+    "linebreak-style": ["error", "unix"],
+    "newline-after-var": ["warn", "always"],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
+  },
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".vue"]
+      }
+    }
+  }
+}
