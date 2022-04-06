@@ -51,6 +51,7 @@ def initialize_extensions(app):
     jwt.init_app(app)
     mail.init_app(app)
     migrate.init_app(app, db, directory="migrations")
+    print("działa!")
 
     @jwt.token_in_blacklist_loader
     def check_if_token_in_blacklist(decrypted_token):
